@@ -1,0 +1,10 @@
+.elements__button {
+    transition: 0.1s linear 0.1s;
+    border: none;
+    align-self: center;
+    cursor: pointer;
+}
+
+.elements__button:hover {
+    transform: scale(1.2);
+}

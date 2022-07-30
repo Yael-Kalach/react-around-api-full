@@ -1,0 +1,9 @@
+.elements__container{
+  color: black;
+  display: flex;
+  padding: 0;
+  flex-wrap: wrap;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}

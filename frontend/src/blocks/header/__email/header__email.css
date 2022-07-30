@@ -1,0 +1,15 @@
+.header__email{
+    font-size: 18px;
+    font-weight: 500;
+    line-height: 1.2;
+    text-align: right;
+    text-decoration: none;
+    color: rgba(255, 255, 255, 0.85);
+    transition: 0.1s linear 0.1s;
+    background-color: transparent;
+    margin-right: 12px;
+}
+
+.header__email:hover{
+    color: rgba(255, 255, 255, 0.7);
+}

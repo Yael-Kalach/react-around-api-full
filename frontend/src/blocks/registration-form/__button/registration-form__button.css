@@ -1,0 +1,28 @@
+.registration-form__button {
+    width: 358px;
+    height: 50px;
+    background-color: #fff;
+    color: #000;
+    transition: 0.1s linear 0.1s;
+    border: none;
+    margin: 216px 0 15px;
+    justify-self: center;
+    cursor: pointer;
+    font-family: Inter;
+    font-size: 18px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 1.2;
+    text-align: center;
+}
+
+.registration-form__button:hover {
+    background-color: rgba(255, 255, 255, 0.85);
+}
+
+@media screen and (max-width: 620px) {
+    .registration-form__button {
+        max-width: 260px;
+        max-height: 46px;
+    }
+}

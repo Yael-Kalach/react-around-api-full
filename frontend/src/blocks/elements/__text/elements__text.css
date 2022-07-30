@@ -1,0 +1,13 @@
+.elements__text {
+    max-width: 246px;
+    font-size: 24px;
+    font-style: normal;
+    font-weight: 900;
+    line-height: 1.2;
+    text-align: left;
+    color: black;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    justify-self: flex-start;
+    margin: 0;
+    }

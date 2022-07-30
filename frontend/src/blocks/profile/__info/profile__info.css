@@ -1,0 +1,24 @@
+.profile__info {
+    max-width: 100%;
+    margin: 0;
+    margin-left: 30px;
+    display: grid;
+    grid-template-columns: 3fr 1fr;
+    grid-template-rows: 1fr 25px;
+    text-align: left;
+    color: #fff;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    align-items: center;
+    grid-template-areas:
+    "name edit"
+    "about about";
+}
+
+@media screen and (max-width: 620px) {
+    .profile__info {
+        margin: 26px auto 30px;
+        grid-template-columns: 85% 15%;
+        grid-gap: 10px 5px;
+    }
+}

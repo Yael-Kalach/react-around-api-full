@@ -1,0 +1,11 @@
+.image-popup__container{
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-areas:
+    ". . . close"
+    "image image image image"
+    "capt . . .";
+    position: relative;
+    max-width: 75vw;
+    max-height: 75vh;
+}

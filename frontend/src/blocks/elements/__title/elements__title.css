@@ -1,0 +1,9 @@
+.elements__title {
+display: flex;
+flex-direction: row;
+padding: 25px 30px 25px 15px;
+text-overflow: ellipsis;
+white-space: nowrap;
+justify-content: space-between;
+margin: 0;
+}

@@ -1,0 +1,14 @@
+.info-popup {
+    max-width: 430px;
+    max-height: 330px;
+    padding: 50px, 80px;
+    position: center;
+    bottom: 35%;
+}
+
+@media screen and (max-width: 620px){
+    .info-popup {
+        max-width: 280px;
+        max-height: 308px;
+    }
+}

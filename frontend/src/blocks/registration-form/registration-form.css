@@ -1,0 +1,13 @@
+.registration-form {
+    margin-top: 60px;
+    color: #fff;
+    max-width: 100%;
+    padding: 0;
+    text-align: center;
+}
+
+@media screen and (max-width: 620px) {
+    .registration-form {
+        max-width: 280px; 
+    }
+}
