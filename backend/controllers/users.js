@@ -8,30 +8,27 @@ const { NODE_ENV, JWT_SECRET } = process.env;
 const getUsers = (req, res) => {
   User.find({})
     .orFail((err) => {
-      throw new ErrorHandler(404, `No user found with ID ${userId}`);
-    })
-    .then((users) => res.send({ data: users }))
-    .catch((err) => res.status(500).send({ message: err.message }));
-};
-
-const getUserById = (req, res) => {
-  User.findById(req.params.id)
-    .orFail((err) => {
-      const error = new Error('user not found');
-      err.statusCode = 404;
-      throw error;
-    })
-    .then((user) => {
-      res.status(200).send({ data: user });
-    })
-    .catch((err) => {
-      if (err.name === 'CastError') {
-        res.status(400).send({ message: 'NotValid Data' });
-      } if (err.name === 'DocumentNotFoundError') {
+      if (err.name === 'DocumentNotFoundError') {
         res.status(404).send({ message: 'User not found' });
       } else {
         res.status(500).send({ message: 'An error has occurred on the server' });
       }
+    })
+    .then((users) => res.send({ data: users }))
+    .catch((err) => {
+      next(err);
+    });
+};
+
+const getUserById = (req, res) => {
+  const userId = req.params.userId ? req.params.userId : req.user._id;
+  User.findById(userId)
+    .orFail(() => {
+      throw new ErrorHandler(404, `No user found with ID ${userId}`);
+    })
+    .then((user) => res.send(user))
+    .catch((err) => {
+      next(err);
     });
 };
 
@@ -44,7 +41,9 @@ const updateProfile = (req, res) => {
       runValidators: true },
   )
     .then((user) => res.send({ data: user }))
-    .catch((err) => res.status(500).send({ message: err.message }));
+    .catch((err) => {
+      next(err);
+    });
 };
 
 const updateAvatar = (req, res) => {
@@ -54,7 +53,9 @@ const updateAvatar = (req, res) => {
     { new: true,
       runValidators: true })
     .then((user) => res.send({ data: user }))
-    .catch((err) => res.status(500).send({ message: err.message }));
+    .catch((err) => {
+      next(err);
+    });
 };
 
 const createUser = (req, res, next) => {
@@ -67,11 +68,10 @@ const createUser = (req, res, next) => {
       email,
       password: hash,
     }))
-    .then((user) => {
-      res.status(201).send({
-        _id: user._id,
-        email: user.email,
-      });
+    .then((finalData) => {
+      const dataCopyNoPass = finalData;
+      dataCopyNoPass.password = '';
+      res.send({ dataCopyNoPass });
     })
     .catch((err) => {
       next(err);
