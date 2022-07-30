@@ -35,11 +35,7 @@ const cardSchema = new mongoose.Schema({
   },
 });
 
-cardSchema.statics.authorizeAndDelete = function authorizeAndDelete({
-  cardId,
-  reqUserId,
-  ownerId,
-}) {
+cardSchema.statics.authorizeAndDelete = function ({cardId, reqUserId, ownerId,}) {
   if (reqUserId === ownerId.toString()) {
     return this.deleteOne({ _id: cardId }).orFail(() => {
       throw new ErrorHandler(404, `No card found with ${cardId}`);

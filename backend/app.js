@@ -2,7 +2,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const helmet = require('helmet');
 const rateLimit = require('express-rate-limit');
-var cors = require('cors');
+const cors = require('cors');
 const { celebrate } = require('celebrate');
 
 require('dotenv').config();
@@ -32,6 +32,7 @@ const limiter = rateLimit({
 const path = require('path');
 // path and port
 const { PORT = 3000 } = process.env;
+const { ErrorHandler } = require('./utils/error');
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use(limiter);
@@ -46,6 +47,11 @@ app.disable('x-powered-by');
 app.use('/users', auth, userRouter);
 app.use('/cards', auth, cardsRouter);
 
+// 404 error
+app.get('*', () => {
+  throw new ErrorHandler(404, 'Requested resource not found');
+});
+
 // Crash test
 app.get('/crash-test', () => {
   setTimeout(() => {
@@ -57,16 +63,17 @@ app.get('/crash-test', () => {
 app.post('/signin', celebrate(getUserAuthSchema), login);
 app.post('/signup', celebrate(getUserAuthSchema), createUser);
 
-// 404 error
-app.get('*', () => {
-  throw new ErrorHandler(404, 'Requested resource not found');
-});
-
 // Centralized Error Handling
 app.use(errorLogger);
-
 app.use((err, req, res, next) => {
-  catchError(err, res);
+  const { statusCode = 500, message } = err;
+  res
+    .status(statusCode)
+    .send({
+      message: statusCode === 500
+        ? 'An error occurred on the server'
+        : message
+    });
 });
 // port listener
 app.listen(PORT, () => {
