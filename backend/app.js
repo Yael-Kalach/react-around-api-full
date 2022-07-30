@@ -5,6 +5,7 @@ const rateLimit = require('express-rate-limit');
 var cors = require('cors');
 const { celebrate } = require('celebrate');
 require('dotenv').config();
+console.log(process.env.NODE_ENV);
 
 const app = express();
 
@@ -12,6 +13,13 @@ mongoose.connect('mongodb://localhost:27017/aroundb');
 
 const { requestLogger, errorLogger } = require('./middlewares/logger');
 const auth = require('./middlewares/auth');
+
+const limiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 100,
+  standardHeaders: true,
+  legacyHeaders: false,
+});
 
 const path = require('path');
 // path and port
@@ -21,6 +29,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 const userRouter = require('./routes/users');
 const cardsRouter = require('./routes/cards');
 
+app.use(limiter);
 app.use(requestLogger);
 app.use(express.json());
 app.use(helmet());
