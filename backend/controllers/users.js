@@ -1,5 +1,9 @@
-const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
+const bcrypt = require('bcrypt');
 const User = require('../models/user');
+const { ErrorHandler } = require('../utils/error');
+
+const { NODE_ENV, JWT_SECRET } = process.env;
 
 const getUsers = (req, res) => {
   User.find({})
@@ -30,16 +34,24 @@ const getUserById = (req, res) => {
     });
 };
 
-const createUser = (req, res) => {
-  bcrypt.hash(req.body.password, 10)
-    .then(hash => User.create({
-      name: req.body.name,
-      about: req.body.about,
-      avatar: req.body.avatar,
-      email: req.body.email,
+const createUser = (req, res, next) => {
+  const {
+    name, about, avatar, email, password,
+  } = req.body;
+  bcrypt
+    .hash(password, 10)
+    .then((hash) => User.create({
+      name,
+      about,
+      avatar,
+      email,
       password: hash,
     }))
-    .then((newUser) => res.send({ data: newUser }))
+    .then((finalData) => {
+      const dataCopyNoPass = finalData;
+      dataCopyNoPass.password = '';
+      res.send({ dataCopyNoPass });
+    })
     .catch((err) => {
       next(err);
     });
@@ -69,15 +81,16 @@ const updateAvatar = (req, res) => {
     });
 };
 
-const login = (req, res) => {
-  User.findUserByCredentials(email, password)
+const login = (req, res, next) => {
+  const { email, password } = req.body;
+  return User.findUserByCredentials(email, password)
     .then((user) => {
-      const jwt = require('jsonwebtoken');
-      res.send({
-        token:
-          jwt.sign({ _id: user._id },
-          { expiresIn: '7d' })
-      });
+      const token = jwt.sign(
+        { _id: user._id },
+        NODE_ENV === 'production' ? JWT_SECRET : 'dev-secret',
+        { expiresIn: '7d' },
+      );
+      res.send({ token });
     })
     .catch((err) => {
       next(err);

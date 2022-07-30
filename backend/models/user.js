@@ -1,24 +1,19 @@
 const mongoose = require('mongoose');
+const bcrypt = require('bcrypt');
+const { ErrorHandler } = require('../utils/error');
 
 const userSchema = new mongoose.Schema({
   name: {
-    role: { type: String, default: 'Jacques Cousteau' },
-    minlength: 2,
-    maxlength: 30,
+    type: String,
+    default: 'Jacques Cousteau',
   },
   about: {
-    role: { type: String, default: 'Explorer' },
-    minlength: 2,
-    maxlength: 30,
+    type: String,
+    default: 'Explorer',
   },
   avatar: {
-    role: { type: String, default: 'https://pictures.s3.yandex.net/resources/avatar_1604080799.jpg' },
-    validate: {
-      validator(v) {
-        return /(http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-/]))?/.test(v);
-      },
-      message: (props) => `${props.value} is not a valid URL!`,
-    },
+    type: String,
+    default: 'https://pictures.s3.yandex.net/resources/avatar_1604080799.jpg'
   },
   email: {
     type: String,
