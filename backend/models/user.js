@@ -21,7 +21,7 @@ const userSchema = new mongoose.Schema({
     unique: [true, 'This email is already used'],
     validate: {
       validator: (v) => isEmail(v),
-      message: (props) => `${props.value} is not a valid Email!`,
+      message: `Wrong email format`,
     }
   },
   password: {
