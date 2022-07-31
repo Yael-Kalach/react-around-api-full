@@ -13,18 +13,17 @@ const cardSchema = new mongoose.Schema({
     required: true,
     validate: {
       validator(v) {
-        return /(http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-/]))?/.test(v);
+        return /(http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-/]))?/gim.test(v);
       },
       message: (props) => `${props.value} is not a valid URL!`,
     },
   },
   owner: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'user',
     required: [true, 'Owner ID is required'],
   },
   likes: {
-    type: mongoose.Schema.Types.ObjectId,
+    type: mongoose.Schema.Types.Array,
     required: true,
     default: [],
   },

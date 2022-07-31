@@ -5,7 +5,7 @@ const { ErrorHandler } = require('../utils/error');
 
 const { NODE_ENV, JWT_SECRET } = process.env;
 
-const getUsers = (req, res) => {
+const getUsers = (req, res, next) => {
   User.find({})
     .orFail((err) => {
       if (err.name === 'DocumentNotFoundError') {
@@ -20,7 +20,7 @@ const getUsers = (req, res) => {
     });
 };
 
-const getUserById = (req, res) => {
+const getUserById = (req, res, next) => {
   const userId = req.params.userId ? req.params.userId : req.user._id;
   User.findById(userId)
     .orFail(() => {
@@ -32,11 +32,12 @@ const getUserById = (req, res) => {
     });
 };
 
-const updateProfile = (req, res) => {
+const updateProfile = (req, res, next) => {
+  console.log(req.body.name)
   User.findByIdAndUpdate(
     req.user._id,
-    { name: req.params,
-      about: req.params },
+    { name: req.body.name,
+      about: req.body.about },
     { new: true,
       runValidators: true },
   )
@@ -46,10 +47,11 @@ const updateProfile = (req, res) => {
     });
 };
 
-const updateAvatar = (req, res) => {
+const updateAvatar = (req, res, next) => {
+  console.log(req.body.avatar)
   User.findByIdAndUpdate(
     req.user._id, {
-    avatar: req.params },
+    avatar: req.body.avatar },
     { new: true,
       runValidators: true })
     .then((user) => res.send({ data: user }))

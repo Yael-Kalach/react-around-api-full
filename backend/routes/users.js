@@ -15,8 +15,8 @@ const {
 router.get('/', getUsers);
 router.get('/me', getUserById);
 router.get('/:userId', celebrate(getCurrentUserSchema), getUserById);
-router.patch('/me', celebrate(updateUserSchema), updateProfile);
-router.patch('/me', celebrate(updateAvatarSchema), updateAvatar);
+router.put('/me/profile', celebrate(updateUserSchema), updateProfile);
+router.put('/me/avatar', celebrate(updateAvatarSchema), updateAvatar);
 
 
 module.exports = router;

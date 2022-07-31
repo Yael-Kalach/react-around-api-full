@@ -3,8 +3,12 @@ const { Segments } = require('celebrate');
 const Joi = require('joi');
 Joi.objectId = require('joi-objectid')(Joi);
 
-const isUrlVaild = (value, helpers) => (
-  validator.isURL(value) ? value : helpers.error('string.uri'));
+const validateURL = (value, helpers) => {
+  if (validator.isURL(value)) {
+    return value;
+  }
+  return helpers.error('string.uri');
+}
 
 const getUserAuthSchema = {
   body: Joi.object().keys({
@@ -12,7 +16,7 @@ const getUserAuthSchema = {
     password: Joi.string().required().min(2).max(200),
     name: Joi.string().min(2).max(30),
     about: Joi.string().min(2).max(30),
-    avatar: Joi.string().custom(isUrlVaild),
+    avatar: Joi.string().custom(validateURL),
   }),
 };
 
@@ -31,14 +35,14 @@ const updateUserSchema = {
 
 const updateAvatarSchema = {
   body: Joi.object().keys({
-    avatar: Joi.string().custom(isUrlVaild),
+    avatar: Joi.string().custom(validateURL),
   }),
 };
 
 const getCreateCardsSchema = {
   body: Joi.object().keys({
     name: Joi.string().max(30).min(2).required(),
-    link: Joi.string().custom(isUrlVaild),
+    link: Joi.string().custom(validateURL),
     owner: Joi.objectId().required(),
     likes: Joi.array(),
   }),
