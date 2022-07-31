@@ -13,9 +13,10 @@ const {
  } = require('../utils/validators');
 
 router.get('/', getUsers);
+router.get('/me', getUserById);
 router.get('/:userId', celebrate(getCurrentUserSchema), getUserById);
-router.patch('/:userId', celebrate(updateUserSchema), updateProfile);
-router.patch('/:userId', celebrate(updateAvatarSchema), updateAvatar);
+router.patch('/me', celebrate(updateUserSchema), updateProfile);
+router.patch('/me', celebrate(updateAvatarSchema), updateAvatar);
 
 
 module.exports = router;

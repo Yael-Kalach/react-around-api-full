@@ -14,9 +14,9 @@ const {
  } = require('../utils/validators');
 
 router.get('/', getCards);
-router.delete('/:cardId', celebrate(getDeleteCardsSchema), deleteCard);
 router.post('/', celebrate(getCreateCardsSchema), createCard);
-router.patch('/:cardId', celebrate(getLikeCard), likeCard);
-router.patch('/:cardId', celebrate(getLikeCard), dislikeCard);
+router.delete('/:cardId', celebrate(getDeleteCardsSchema), deleteCard);
+router.patch('/:cardId/likes', celebrate(getLikeCard), likeCard);
+router.patch('/:cardId/likes', celebrate(getLikeCard), dislikeCard);
 
 module.exports = router;
