@@ -7,24 +7,21 @@ const getCards = (req, res) => {
     .catch((err) => next(err));
 };
 
-const deleteCard = (req, res) => {
-  Card.findByIdAndRemove(req.user._id)
-    .orFail((err) => {
-      if (err.name === 'DocumentNotFoundError') {
-        res.status(404).send({ message: 'User not found' });
-      } else {
-        res.status(500).send({ message: 'An error has occurred on the server' });
-      }
-    })
-    .then((user) => res.send(user))
-    .catch((err) => next(err));
+const createCard = (req, res, next) => {
+  const { name, link, owner } = req.body;
+
+  Card.create({ name, link, owner })
+    .then((card) => res.send(card))
+    .catch((err) => {
+      next(err);
+    });
 };
 
-const createCard = (req, res) => {
-  console.log(req.user._id);
-
-  Card.create(req.user)
-    .then((newCard) => res.send(newCard))
+const deleteCard = (req, res) => {
+  const { cardId } = req.params;
+  const { owner } = req.body;
+  Card.authorizeAndDelete({ cardId, reqUserId: req.user._id, ownerId: owner })
+    .then((user) => res.send(user))
     .catch((err) => next(err));
 };
 
@@ -33,6 +30,7 @@ const likeCard = (req, res) => Card.findByIdAndUpdate(
     req.params.cardId,
     { $addToSet: { likes: req.user._id } },
     { new: true })
+    .then((card) => res.send(card))
     .catch((err) => next(err))
 );
 
@@ -41,6 +39,7 @@ const dislikeCard = (req, res) => Card.findByIdAndUpdate(
     req.params.cardId,
     { $pull: { likes: req.user._id } },
     { new: true })
+    .then((card) => res.send(card))
     .catch((err) => next(err))
 );
 
