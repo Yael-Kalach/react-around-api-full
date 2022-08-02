@@ -70,10 +70,9 @@ app.use((err, req, res, next) => {
   res
     .status(statusCode)
      .send({
-      message
-    //   message: statusCode === 500
-    //     ? 'An error occurred on the server'
-    //     : message
+      message: statusCode === 500
+        ? 'An error occurred on the server'
+        : message
     });
 });
 // port listener
