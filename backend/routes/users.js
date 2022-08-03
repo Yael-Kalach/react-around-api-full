@@ -10,13 +10,12 @@ const {
   getCurrentUserSchema,
   updateUserSchema,
   updateAvatarSchema,
- } = require('../utils/validators');
+} = require('../utils/validators');
 
 router.get('/', getUsers);
 router.get('/me', getUserById);
 router.get('/:userId', celebrate(getCurrentUserSchema), getUserById);
 router.put('/me/profile', celebrate(updateUserSchema), updateProfile);
 router.put('/me/avatar', celebrate(updateAvatarSchema), updateAvatar);
-
 
 module.exports = router;

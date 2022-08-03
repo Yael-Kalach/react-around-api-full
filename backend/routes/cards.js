@@ -11,7 +11,7 @@ const {
   getCreateCardsSchema,
   getDeleteCardsSchema,
   getLikeCard,
- } = require('../utils/validators');
+} = require('../utils/validators');
 
 router.get('/', getCards);
 router.post('/', celebrate(getCreateCardsSchema), createCard);

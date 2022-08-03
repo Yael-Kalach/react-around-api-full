@@ -8,7 +8,7 @@ const validateURL = (value, helpers) => {
     return value;
   }
   return helpers.error('string.uri');
-}
+};
 
 const getUserAuthSchema = {
   body: Joi.object().keys({

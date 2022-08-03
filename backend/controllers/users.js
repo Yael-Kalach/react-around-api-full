@@ -33,13 +33,16 @@ const getUserById = (req, res, next) => {
 };
 
 const updateProfile = (req, res, next) => {
-  console.log(req.body.name)
   User.findByIdAndUpdate(
     req.user._id,
-    { name: req.body.name,
-      about: req.body.about },
-    { new: true,
-      runValidators: true },
+    {
+      name: req.body.name,
+      about: req.body.about,
+    },
+    {
+      new: true,
+      runValidators: true,
+    },
   )
     .then((user) => res.send({ data: user }))
     .catch((err) => {
@@ -48,12 +51,14 @@ const updateProfile = (req, res, next) => {
 };
 
 const updateAvatar = (req, res, next) => {
-  console.log(req.body.avatar)
   User.findByIdAndUpdate(
-    req.user._id, {
-    avatar: req.body.avatar },
-    { new: true,
-      runValidators: true })
+    req.user._id,
+    { avatar: req.body.avatar },
+    {
+      new: true,
+      runValidators: true,
+    },
+  )
     .then((user) => res.send({ data: user }))
     .catch((err) => {
       next(err);
@@ -61,7 +66,13 @@ const updateAvatar = (req, res, next) => {
 };
 
 const createUser = (req, res, next) => {
-  const { email, password, name, about, avatar, } = req.body;
+  const {
+    email,
+    password,
+    name,
+    about,
+    avatar,
+  } = req.body;
   bcrypt.hash(password, 10)
     .then((hash) => User.create({
       name,
@@ -76,7 +87,11 @@ const createUser = (req, res, next) => {
       res.send({ dataCopyNoPass });
     })
     .catch((err) => {
-      next(err);
+      if (err.name === 'MongoServerError') {
+        res.status(409).send({ message: 'Email already in use!' });
+      } else {
+        next(err);
+      }
     });
 };
 

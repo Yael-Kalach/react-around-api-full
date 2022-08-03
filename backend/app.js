@@ -6,16 +6,17 @@ const cors = require('cors');
 const { celebrate } = require('celebrate');
 
 require('dotenv').config();
+
 console.log(process.env.NODE_ENV);
 
 const app = express();
-
+// path
+const path = require('path');
 // routers
 const userRouter = require('./routes/users');
 const cardsRouter = require('./routes/cards');
 const { createUser, login } = require('./controllers/users');
 const { getUserAuthSchema } = require('./utils/validators');
-
 
 mongoose.connect('mongodb://localhost:27017/aroundb');
 
@@ -29,14 +30,14 @@ const limiter = rateLimit({
   legacyHeaders: false,
 });
 
-const path = require('path');
 // path and port
 const { PORT = 3000 } = process.env;
 const { ErrorHandler } = require('./utils/error');
+
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use(limiter);
 app.use(requestLogger);
+app.use(limiter);
 app.use(express.json());
 app.use(helmet());
 app.use(cors());
@@ -69,10 +70,10 @@ app.use((err, req, res, next) => {
   const { statusCode = 500, message } = err;
   res
     .status(statusCode)
-     .send({
+    .send({
       message: statusCode === 500
         ? 'An error occurred on the server'
-        : message
+        : message,
     });
 });
 // port listener
